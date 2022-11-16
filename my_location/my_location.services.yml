@@ -1,0 +1,4 @@
+services:
+  my_location.get_date_time:
+    class: Drupal\my_location\Service\GetDateTime
+    arguments: ['@config.factory']

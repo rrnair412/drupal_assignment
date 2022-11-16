@@ -3,11 +3,10 @@
 namespace Drupal\my_location\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\my_location\Service\GetDateTime;
 
 /**
@@ -64,29 +63,26 @@ class MyLocationBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
-    $data = [];
-    $country = $this->configFactory->get('my_location.settings')->get('country');
     $city = $this->configFactory->get('my_location.settings')->get('city');
-    $date_info = $this->get_datetime->getTimeDate();
-    $data = [
-      'date_info' => $date_info,
-      'city' => $city,
-      'country' => $country,
+    $country = $this->configFactory->get('my_location.settings')->get('country');
+    $renderable['result'] = [
+      '#lazy_builder' => ['my_location.get_date_time:getTimeDate', [
+        $city,
+        $country,
+      ]
+    ],
+      '#create_placeholder' => TRUE,
     ];
-    // Render date and time to twig template.
-    $renderable = [
-      '#theme' => 'my-location',
-      '#data' => $data,
-    ];
-
     return $renderable;
   }
 
   /**
-   * {@inheritdoc}
+   * Invalidate cache on config update.
    */
-  public function getCacheMaxAge() {
-    return 0;
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'config:my_location.settings',
+    ]);
   }
 
 }
