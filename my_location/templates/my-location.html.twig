@@ -1,0 +1,9 @@
+{% if data.date_info.time %}
+  <div><b>{{ data.date_info.time }}</b></div>
+{% endif %}
+{% if data.date_info.day and data.date_info.date %}
+  <div>{{ data.date_info.day }}, {{ data.date_info.date }}</div>
+{% endif %}
+{% if data.city and data.country %}
+  <div>Time in: {{ data.city }}, {{ data.country }}</div>
+{% endif %}

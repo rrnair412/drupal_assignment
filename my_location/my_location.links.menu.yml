@@ -1,0 +1,6 @@
+my_location.settings_form:
+  title: 'My Location settings'
+  route_name: my_location.admin_settings
+  description: 'Change Timezone, city and country setting for My Location block.'
+  parent: system.admin_config_system
+  weight: 99
